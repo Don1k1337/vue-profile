@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-
-createApp(App).mount('#app')
+import './theme.sass'
+createApp(App)
+    .mount('#app')
