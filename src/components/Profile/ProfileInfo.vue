@@ -10,7 +10,6 @@
         </div>
       </div>
       <br>
-
       <div class="card__info">
         <form-info-input />
       </div>
@@ -28,13 +27,6 @@ import FormInfoInput from "@/components/Profile/Form/FormInfoInput.vue";
 
 export default {
   name: "ProfileInfo",
-  emits: ['uploadChange'],
-  setup() {
-    let name = 'Test'
-    return {
-      name
-    }
-  },
   components: {FormInfoInput, ProfilePassword, ProfileAvatar}
 }
 </script>

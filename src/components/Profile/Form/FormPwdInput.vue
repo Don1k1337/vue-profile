@@ -1,5 +1,6 @@
 <template>
   <Form @submit="onSubmit">
+    <div class="wrapper">
     <div class="form-control" >
       <label>
         Текущий пароль:
@@ -21,7 +22,8 @@
         <ErrorMessage name="confirmPwd" :class="eMsg" />
       </label>
     </div>
-    <button class="btn primary">Изменить пароль</button>
+    <button class="btn primary" :disabled="preventSubmitting">Изменить пароль</button>
+    </div>
   </Form>
 </template>
 
@@ -36,11 +38,12 @@ export default {
     Field,
     ErrorMessage
   },
-  setup() {
+  data() {
     return {
       eMsg: 'error',
       newPwd: '',
-      confirmPwd: ''
+      confirmPwd: '',
+      preventSubmitting: false
     }
   },
   computed: {
@@ -65,27 +68,27 @@ export default {
                 и быть от 6 до 16 символов в длине.
                 Пароль должен быть введен на латинице`;
       }
+      this.preventSubmitting = false
       return true;
     },
     validateConfirmPwd(value) {
       if (!value) {
+        this.preventSubmitting = true
         return 'Это поле является обязательным';
       }
       if (!this.isConfirmPwdMatch) {
+        this.preventSubmitting = true
         return 'Введенные пароли не совпадают'
       }
+      this.preventSubmitting = false
       return true
     },
     onSubmit(e) {
-      console.log(e.value)
+      if (this.preventSubmitting) {
+        return
+      }
+      alert(JSON.stringify(e))
     }
   }
 }
 </script>
-
-<style scoped lang="sass">
-.form-control
-  display: grid
-  grid-template-columns: 1fr
-  justify-content: center
-</style>

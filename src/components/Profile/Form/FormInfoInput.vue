@@ -1,5 +1,5 @@
 <template>
-    <Form @submit.prevent="onSubmit">
+    <Form @submit="onSubmit">
       <div class="form-control" >
         <label for="name">ФИО</label>
         <Field :class="eMsg" name="fullName" type="text" :rules="validateFullName" />
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     validateFullName(value) {
-      if (value.length < 3) {
+      if (!value || value.length < 3) {
         this.preventSubmitting = true
         return 'Пожалуйста введите ФИО в правильном формате'
       }
@@ -93,7 +93,10 @@ export default {
       return true
     },
     onSubmit(e) {
-      console.log(e.value)
+      if (this.preventSubmitting) {
+        return
+      }
+      alert(JSON.stringify(e))
     }
 
   },
