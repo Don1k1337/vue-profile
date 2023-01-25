@@ -56,13 +56,23 @@ export default {
       if (!value) {
         return 'Это поле является обязательным';
       }
+      let pwdInfo = JSON.parse(localStorage.getItem('PwdInfo'))
+      if (!pwdInfo) {
+        return true;
+      }
+      let oldPwd = pwdInfo.oldPwd
+      if (value !== oldPwd) {
+        return 'Текущий пароль неверен, загляните в LocalStorage'
+      }
       return true;
     },
+
     validateNewPwd(value) {
       const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
       if (!value) {
         return 'Это поле является обязательным';
       }
+      if (value)
       if (!regex.test(value)) {
         return `Пароль должен содержать хотя бы 1 спец-символ, 1 цифру,
                 и быть от 6 до 16 символов в длине.
@@ -87,7 +97,14 @@ export default {
       if (this.preventSubmitting) {
         return
       }
-      alert(JSON.stringify(e))
+      localStorage.setItem('PwdInfo', JSON.stringify(e))
+      alert('Данные сохранены в LocalStorage')
+    }
+  },
+  mounted() {
+    let data = JSON.parse(localStorage.getItem('PwdInfo'))
+    if (data) {
+      this.data = data
     }
   }
 }

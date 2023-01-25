@@ -17,7 +17,8 @@
       </div>
       <div class="form-control" >
         <label for="city">Город</label>
-        <input type="text" id="City" v-model="city">
+        <Field name="city" type="text" :rules="validateCity" />
+        <ErrorMessage name="city" :class="eMsg" />
       </div>
       <div class="form-control">
         <label for="phone">Номер телефона</label>
@@ -26,7 +27,7 @@
       </div>
       <div class="form-control">
         <label for="languages">Владение языками</label>
-        <form-lng-input />
+        <form-lng-input v-model="selectedValues" />
       </div>
       <button class="btn primary" :disabled="preventSubmitting">Изменить</button>
     </Form>
@@ -41,8 +42,10 @@ export default {
   setup() {
     return {
       eMsg: 'error',
-      fullName: '',
       city: '',
+      fullName: '',
+      eMail: '',
+      selectedValues: [],
       preventSubmitting: false
     }
   },
@@ -80,6 +83,12 @@ export default {
       this.preventSubmitting = false
       return true;
     },
+    validateCity(value) {
+      if (!value) {
+        return true
+      }
+      return true
+    },
     validatePhone(value) {
       if (!value) {
         this.preventSubmitting = false
@@ -96,7 +105,17 @@ export default {
       if (this.preventSubmitting) {
         return
       }
-      alert(JSON.stringify(e))
+      localStorage.setItem('ProfileInfo', JSON.stringify(e))
+      let profileInfo = JSON.parse(localStorage.getItem('ProfileInfo'))
+      profileInfo.selectedValues = this.selectedValues
+      localStorage.setItem('ProfileInfo', JSON.stringify(profileInfo))
+      alert('Данные сохранены в LocalStorage')
+    },
+    mounted() {
+      let data = JSON.parse(localStorage.getItem('ProfileInfo'))
+      if (data) {
+        this.data = data
+      }
     }
 
   },
